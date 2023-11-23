@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Password Generator | Ajmalsha</title>
+    <link rel="stylesheet" href="style.css" type="text/css">
+</head>
+<body>
+    <div class="container">
+        <div class="content">
+            <h1>Password Generator</h1>
+            <h2>Generate a random password</h2>
+            <br>
+            <div class="passField">
+                <div class="display">
+                    <input class="generatedPassword" type="text" id="password" value="" placeholder="password..." disabled>
+                    <img src="public/copy.png"  onclick="copyPassword()" alt="copyFromHere" >
+                </div>
+                <button onclick="createPassword()" >Generate</button>
+            </div>
+
+            <div class="passLength">
+                <div class="displayLength">
+                    <input class="generatedPassword" type="text" id="length" value="" placeholder="enter length">
+                </div>
+                <button onclick="updateLength()" >Update</button>
+            </div>
+            <div id="alert" >Password copied!</div>
+        </div>
+    </div>
+
+    <script>
+        const passwordBox = document.getElementById("password");
+        const alertBox = document.getElementById("alert");
+        const lengthBox = document.getElementById("length");
+        let length
+
+        const upperCase = "ABCDEFGHIJKLMNOPQRSTUVWXYXZ"
+        const lowerCase = "abcdefghijklmnopqrstuvwxyxz"
+        const number    = "0123456789"
+        const symbols   = "@#$%^&*()_+~{}[]<>/-=|"
+        const allChar   = upperCase+lowerCase+number+symbols 
+
+        const createPassword =()=>{
+            if(!length){
+                window.alert('please update length')
+            }else{
+                let password = ''
+                password+= upperCase[Math.floor(Math.random()*upperCase.length)]
+                password+= lowerCase[Math.floor(Math.random()*lowerCase.length)]
+                password+= number[Math.floor(Math.random()*number.length)]
+                password+= symbols[Math.floor(Math.random()*symbols.length)]
+
+                while(password.length<length){
+                    password+= allChar[Math.floor(Math.random()*allChar.length)]
+                }
+
+                passwordBox.value = password
+            }
+        }
+
+        const copyPassword = () => {
+
+            if(passwordBox.value){
+                navigator.clipboard.writeText(passwordBox.value).then(() => {
+                    alertBox.style.display = "block";
+                    setTimeout(() => {
+                        alertBox.style.display = "none";
+                    }, 1000); // Hide the alert after 1 second
+                })
+                .catch((error) => {
+                    console.error("Unable to copy text to clipboard: ", error);
+                });
+                console.log("Text copied to clipboard");
+                // window.alert('password copied')
+            }else{
+                window.alert('please generate a password')
+            }
+        }
+
+        const updateLength=()=>{
+            if(lengthBox.value>25||lengthBox.value<6){
+                window.alert(`length of password should be between 6 and 25`)
+            }else{
+                length=lengthBox.value;
+                window.alert(`length updated to ${length}`)
+            }
+        }
+
+    </script>
+</body>
+</html>
